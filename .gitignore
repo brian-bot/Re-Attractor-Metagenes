@@ -3,3 +3,8 @@
 
 # Example code in package build process
 *-Ex.R
+.Rproj.user
+*.Rproj
+
+## OTHER GUIDE CODE NOT TO BE COMMITTED HERE
+tcga*.R
