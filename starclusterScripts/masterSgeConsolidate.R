@@ -33,11 +33,16 @@ attractorsExpected <- paste("Attr-", rownames(exprMat), ".txt", sep="")
 
 stopifnot(attractorsExpected %in% attractorsFinished)
 
-myOut <- lapply(as.list(attractorsExpected), function(i){
+metagenes <- lapply(as.list(attractorsExpected), function(i){
   tmp <- as.numeric(readLines(file.path(outputPath, i)))
-  names(tmp) <- rownames(exprMat)
-  return(sort(tmp, decreasing=T)[1:100])
+  if( length(tmp) == 0L ){
+    return(NULL)
+  } else{
+    names(tmp) <- rownames(exprMat)
+    return(sort(tmp, decreasing=T)[1:100])
+  }
 })
+names(metagenes) <- sub(".txt", "", attractorsExpected, fixed=T)
 
 
 
