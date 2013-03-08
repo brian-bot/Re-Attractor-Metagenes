@@ -17,7 +17,7 @@ require(R.utils)
 outputPath <- file.path("/shared/output", synId)
 
 ## INCLUDE RECURSIVE FOR GENE NAMES WITH "/"
-attractorsFinished <- list.files(outputPath, recursive=T)
+attractorsFinished <- list.files(outputPath, pattern=".txt", recursive=T)
 
 mySynEnt <- downloadEntity(synId)
 exprFile <- file.path(mySynEnt$cacheDir, mySynEnt$files)
@@ -33,12 +33,11 @@ attractorsExpected <- paste("Attr-", rownames(exprMat), ".txt", sep="")
 
 stopifnot(attractorsExpected %in% attractorsFinished)
 
-## CREATE THE MASTER METAGENE MATRIX AND PUSH TO SYNAPSE
-outFile <- file.path(outputPath, paste(tolower(mySynEnt$annotations$acronym), "Metagenes.txt", sep=""))
-system(paste("touch", outFile))
-for( i in attractorsExpected[1:5] ){
-  write.table(rbind(c(sub(".txt", "", i, fixed=T), readLines(file.path(outputPath, i)))),
-              file=outFile, append=T, quote=F, sep="\t", row.names=F, col.names=F)
-}
+myOut <- lapply(as.list(attractorsExpected), function(i){
+  tmp <- as.numeric(readLines(file.path(outputPath, i)))
+  names(tmp) <- rownames(exprMat)
+  return(sort(tmp, decreasing=T)[1:100])
+})
+
 
 
