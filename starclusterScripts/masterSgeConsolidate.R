@@ -43,6 +43,19 @@ metagenes <- lapply(as.list(attractorsExpected), function(i){
   }
 })
 names(metagenes) <- sub(".txt", "", attractorsExpected, fixed=T)
+save(metagenes, file=file.path(outputPath, "metagenes.rbin"))
 
+## UPLOAD TO SYNAPSE
+myFold <- createEntity(Folder(name=mySynEnt$annotations$acronym, parentId="syn1714112"))
+myMG <- Data(name="metagenes.rbin", parentId=myFold$properties$id)
+
+myMG <- addFile(myMG, file.path(outputPath, "metagenes.rbin"))
+myMG <- storeEntity(myMG)
+
+## ADD PROVENANCE - NEED LINK TO EXTERNAL URL TO COMPLETE THIS (POINTING TO GITHUB)
+myAct <- Activity(name="Attractor Metagenes Scanning", used=list(list(entity=mySynEnt, wasExecuted=F)))
+myAct <- createEntity(myAct)
+generatedBy(myMG) <- myAct
+myMG <- storeEntity(myMG)
 
 
