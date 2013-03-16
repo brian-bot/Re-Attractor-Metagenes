@@ -7,9 +7,8 @@ source("/shared/code/R/.Rprofile")
 ##   synId   : Synapse ID for TCGA dataset to create metagenes
 #####
 
-# myArgs <- commandArgs(TRUE)
-# synId <- myArgs[1]
-synId <- "syn417767"
+myArgs <- commandArgs(TRUE)
+synId <- myArgs[1]
 
 require(synapseClient)
 require(R.utils)
